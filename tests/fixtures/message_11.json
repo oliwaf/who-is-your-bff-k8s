@@ -1,0 +1,61 @@
+{
+  "participants": [
+    {
+      "name": "Maciek \u00c5\u0081apa"
+    },
+    {
+      "name": "Fabian Oliwa"
+    }
+  ],
+  "messages": [
+    {
+      "sender_name": "Maciek \u00c5\u0081apa",
+      "timestamp_ms": 1432458165801,
+      "content": "No spoko spoko \u00f3\u00be\u008c\u00b0",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Fabian Oliwa",
+      "timestamp_ms": 1432458142639,
+      "content": "Te\u00c5\u00bc tak my\u00c5\u009bl\u00c4\u0099, dobra jeszcze si\u00c4\u0099 odezw\u00c4\u0099",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Fabian Oliwa",
+      "timestamp_ms": 1432458127698,
+      "sticker": {
+        "uri": "messages/stickers_used/851587_369239346556147_162929011_n_369239343222814.png"
+      },
+      "type": "Generic",
+      "ip": "94.254.145.73"
+    },
+    {
+      "sender_name": "Maciek \u00c5\u0081apa",
+      "timestamp_ms": 1432457991010,
+      "content": "Eeee dasz rade :D",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Fabian Oliwa",
+      "timestamp_ms": 1432457768748,
+      "content": "Jeszcze nie wiem,  jak mi co\u00c5\u009b nie wypadnie to b\u00c4\u0099d\u00c4\u0099. Ja mam ten problem, \u00c5\u00bce salon dalin mnie za ka\u00c5\u00bcdym razem niszczy \u00f3\u00be\u008d\u008a",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Maciek \u00c5\u0081apa",
+      "timestamp_ms": 1432455049113,
+      "content": "Spoko \u00f3\u00be\u008d\u0087 wpadasz?",
+      "type": "Generic"
+    },
+    {
+      "sender_name": "Fabian Oliwa",
+      "timestamp_ms": 1432453502277,
+      "content": "Dzi\u00c4\u0099ki za zaproszenie ;)",
+      "type": "Generic"
+    }
+  ],
+  "title": "Maciek \u00c5\u0081apa",
+  "is_still_participant": true,
+  "thread_type": "Regular",
+  "thread_path": "inbox/macieklapa_-y-rpomfea"
+}
