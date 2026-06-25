@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: who-is-your-bff
+  name: whoisyourbff
+  namespace: whoisyourbff
   labels:
-    app: who-is-your-bff
+    app: whoisyourbff
 spec:
   type: ClusterIP
   selector:
-    app: who-is-your-bff
+    app: whoisyourbff
   ports:
     - name: http
       port: 8501
-      targetPort: http
+      targetPort: 8501

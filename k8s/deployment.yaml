@@ -1,22 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: who-is-your-bff
+  name: whoisyourbff
+  namespace: whoisyourbff
   labels:
-    app: who-is-your-bff
+    app: whoisyourbff
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: who-is-your-bff
+      app: whoisyourbff
   template:
     metadata:
       labels:
-        app: who-is-your-bff
+        app: whoisyourbff
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
-        - name: who-is-your-bff
-          image: who-is-your-bff:latest
+        - name: whoisyourbff
+          image: ghcr.io/oliwaf/who-is-your-bff-k8s:0.1.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -39,4 +42,4 @@ spec:
               memory: 256Mi
             limits:
               cpu: 500m
-              memory: 768Mi
+              memory: 512Mi

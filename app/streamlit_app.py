@@ -210,6 +210,36 @@ def top_nested_items(
     return dict(top_senders)
 
 
+def render_bullet_list(items: list[str]) -> None:
+    st.markdown("\n".join(f"- {item}" for item in items))
+
+
+def render_value_list(values: dict[str, Any] | list[tuple[Any, Any]]) -> None:
+    items = values.items() if isinstance(values, dict) else values
+    st.markdown("\n".join(f"- {key}: {value}" for key, value in items))
+
+
+def render_conversation_summaries(summaries: list[dict[str, Any]]) -> None:
+    lines: list[str] = []
+    for summary in summaries:
+        lines.extend(
+            [
+                f"**{summary['conversation']}**",
+                f"- Participants: {summary['participants_count']}",
+                f"- Messages: {summary['total_messages']}",
+                f"- Text messages: {summary['text_messages']}",
+                f"- Words: {summary['words']}",
+                f"- Top sender: {summary['top_sender']} "
+                f"({summary['top_sender_messages']})",
+                f"- First message: {summary['first_message_date']}",
+                f"- Last message: {summary['last_message_date']}",
+                "",
+            ]
+        )
+
+    st.markdown("\n".join(lines))
+
+
 def build_hourly_activity_figure(hourly_counts: dict[str, dict[int, int | float]]):
     if not hourly_counts:
         return None
@@ -422,7 +452,7 @@ def render_dashboard(
                 reverse=True,
             )[:10]
             st.caption("Showing top 10 conversations.")
-            st.table(summaries)
+            render_conversation_summaries(summaries)
 
             messages_by_conversation = top_items(
                 {
@@ -440,7 +470,7 @@ def render_dashboard(
 
         st.subheader("Participants")
         if participants:
-            st.write(participants)
+            render_bullet_list(participants)
         else:
             st.info("No participants found in this export.")
 
@@ -453,7 +483,7 @@ def render_dashboard(
             "Avg words / msg",
             conversation_stats["average_words_per_message"],
         )
-        st.json(
+        render_value_list(
             {
                 "total_messages": conversation_stats["total_messages"],
                 "text_messages": conversation_stats["text_messages"],
@@ -487,7 +517,7 @@ def render_dashboard(
                 "Top 10 senders. In All conversations, the shared sender is "
                 "shown as avg/conversation."
             )
-            st.table(limited_messages_by_sender.items())
+            render_value_list(limited_messages_by_sender)
             messages_chart = build_bar_figure(
                 limited_messages_by_sender,
                 title="Top 10 senders by messages (shared sender avg/conversation)",
@@ -512,7 +542,7 @@ def render_dashboard(
                 "Top 10 senders. In All conversations, the shared sender is "
                 "shown as avg/conversation."
             )
-            st.table(limited_words_by_sender.items())
+            render_value_list(limited_words_by_sender)
             words_chart = build_bar_figure(
                 limited_words_by_sender,
                 title="Top 10 senders by words (shared sender avg/conversation)",
@@ -564,7 +594,7 @@ def render_dashboard(
         st.subheader("Top words")
         common_words = get_most_common_words(data, limit=15)
         if common_words:
-            st.table(common_words)
+            render_value_list(common_words)
         else:
             st.info("No text messages found to analyze.")
         return

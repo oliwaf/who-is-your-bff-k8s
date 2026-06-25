@@ -44,6 +44,7 @@ pip install -r requirements-dev.txt
 ## Run Locally
 
 ```powershell
+python -m pytest -v
 streamlit run app/streamlit_app.py
 ```
 
@@ -63,7 +64,7 @@ ignores `data/` for that reason.
 ## Tests
 
 ```powershell
-pytest
+python -m pytest -v
 ```
 
 ## Docker
@@ -71,29 +72,79 @@ pytest
 Build the image:
 
 ```powershell
-docker build -t who-is-your-bff:latest .
+docker build -t who-is-your-bff:local .
 ```
 
 Run the app:
 
 ```powershell
-docker run --rm -p 8501:8501 who-is-your-bff:latest
+docker run --rm -p 8501:8501 who-is-your-bff:local
 ```
 
 ## Kubernetes
 
-The manifests in `k8s/` deploy the Streamlit app as a single replica service.
+The manifests in `k8s/` are prepared for a manual homelab deployment. They do not
+include Ingress yet.
 
-For a local cluster such as kind or Docker Desktop Kubernetes, build/load the image and
-apply the manifests:
+Current Kubernetes settings:
+
+- Namespace: `whoisyourbff`
+- Deployment: `whoisyourbff`
+- Service: `whoisyourbff`
+- Image: `ghcr.io/oliwaf/who-is-your-bff-k8s:0.1.1`
+- Image pull secret: `ghcr-secret`
+- Service type: `ClusterIP`
+
+Tag and push the image to GHCR:
 
 ```powershell
-docker build -t who-is-your-bff:latest .
-kubectl apply -f k8s/
-kubectl port-forward service/who-is-your-bff 8501:8501
+docker tag who-is-your-bff:local ghcr.io/oliwaf/who-is-your-bff-k8s:0.1.1
+docker push ghcr.io/oliwaf/who-is-your-bff-k8s:0.1.1
 ```
 
-Then open `http://localhost:8501`.
+Create the namespace manually:
 
-If you publish the image to a registry, update `image` in
-`k8s/deployment.yaml` before applying the manifests.
+```bash
+kubectl create namespace whoisyourbff
+```
+
+If the GHCR image is private, create the image pull secret manually:
+
+```bash
+read -s GHCR_TOKEN
+
+kubectl create secret docker-registry ghcr-secret \
+  --namespace whoisyourbff \
+  --docker-server=ghcr.io \
+  --docker-username=oliwaf \
+  --docker-password="$GHCR_TOKEN"
+
+unset GHCR_TOKEN
+```
+
+Deploy manually:
+
+```bash
+kubectl apply -f k8s/
+```
+
+Verify manually:
+
+```bash
+kubectl get pods -n whoisyourbff -o wide
+kubectl get svc -n whoisyourbff
+kubectl logs -n whoisyourbff deploy/whoisyourbff
+kubectl rollout status deployment/whoisyourbff -n whoisyourbff
+```
+
+Test through port-forward:
+
+```bash
+kubectl port-forward -n whoisyourbff svc/whoisyourbff 8501:8501 --address 0.0.0.0
+```
+
+Then open:
+
+```text
+http://192.168.88.50:8501
+```
